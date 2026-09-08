@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#17120e" />
+  <title>성종의 인재 선발소 v10.6.1-rankfix</title>
+  <link rel="stylesheet" href="styles.css?v=10.6.1-rankfix" />
+</head>
+<body>
+  <main id="app" class="app-shell">
+    <section id="screen-main" class="screen active">
+      <div class="main-overlay"></div>
+      <div class="main-content">
+        <button id="btn-settings" class="settings-btn" type="button" aria-label="설정">⚙</button>
+
+        <header class="title-plaque main-title-classic">
+          <span class="eyebrow">成宗 人材選拔所</span>
+          <h1 id="title-logo">성종의<br><b>인재 선발소</b></h1>
+          <p>훈구인가, 사림인가.<br>서류를 읽고 도장을 찍어라.</p>
+        </header>
+
+        <div class="start-panel wood-panel main-start-panel">
+          <div class="main-start-kicker">
+            <img class="main-royal-seal" src="assets/main/royal_seal.webp" alt="" aria-hidden="true" />
+            <div><span>성종의 어명</span><strong>심사관의 이름을 기록하시오</strong></div>
+            <img class="main-red-seal" src="assets/main/red_seal_mark.webp" alt="" aria-hidden="true" />
+          </div>
+          <label for="nickname">학번 + 이름</label>
+          <div class="nickname-row">
+            <input id="nickname" maxlength="16" placeholder="예: 3130 홍길동" autocomplete="off" aria-describedby="nickname-help" />
+            <button id="btn-start" class="pixel-btn primary">심사 시작</button>
+          </div>
+          <p id="nickname-help" class="nickname-help">학번 4자리와 이름을 띄어 써 주세요. 예) 3130 홍길동</p>
+          <p class="microcopy">일반모드 · 20명 · 제한시간 5분 · 명예의 전당 기록</p>
+          <div class="main-record-row">
+            <div class="round-seed-row"><span>심사번호</span><b id="main-round-seed">자동 생성</b></div>
+            <div class="collection-row"><span>누적 심사 유형</span><b id="main-collection-progress">0 / 70</b></div>
+          </div>
+        </div>
+
+        <div class="main-desk-divider" aria-hidden="true">
+          <img src="assets/main/desk_overlay.webp" alt="" />
+        </div>
+
+        <div id="recovery-card" class="recovery-card wood-panel" hidden>
+          <div><b>중단된 심사 기록이 있습니다.</b><span id="recovery-summary">기록 미반영 상태로 이어서 할 수 있습니다.</span></div>
+          <button id="btn-recover" class="pixel-btn primary" type="button">심사 복구</button>
+          <button id="btn-discard-recovery" class="pixel-btn" type="button">기록 폐기</button>
+        </div>
+
+        <div class="leaderboard hall-frame-panel">
+          <div class="hall-frame-content">
+            <div class="panel-title-row">
+              <h2>명예의 전당</h2>
+              <div class="ranking-head-actions">
+                <span id="ranking-mode" class="status-chip">연결 확인 중</span>
+                <button id="btn-refresh-ranking" class="ranking-refresh-btn" type="button" aria-label="명예의 전당 새로고침">↻ 새로고침</button>
+              </div>
+            </div>
+            <p class="leaderboard-desc">전체 학생 최고 기록 TOP 20 · 학생별 최고점 1개</p>
+            <p id="leaderboard-status" class="leaderboard-status">명예의 전당을 불러오는 중...</p>
+            <ol id="leaderboard-list" class="ranking-list shared-ranking-list"></ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-prologue" class="screen story-screen">
+      <div class="story-topbar">
+        <span>프롤로그</span>
+        <button class="text-btn" data-action="skip-prologue">SKIP</button>
+      </div>
+      <div id="prologue-card" class="story-card"></div>
+      <div class="story-controls">
+        <div id="prologue-dots" class="dots"></div>
+        <button id="btn-prologue-next" class="pixel-btn primary">다음</button>
+      </div>
+    </section>
+
+    <section id="screen-tutorial" class="screen tutorial-practice-screen">
+      <div class="story-topbar tutorial-topbar">
+        <span>실전 연습</span>
+        <button class="text-btn" data-action="skip-tutorial">SKIP</button>
+      </div>
+      <div class="tutorial-practice-wrap">
+        <div class="tutorial-instruction wood-panel">
+          <span id="tutorial-step-label" class="tutorial-step-label">1/3</span>
+          <h2 id="tutorial-step-title">서류를 확인하세요</h2>
+          <p id="tutorial-step-text">뒤쪽의 추천서를 눌러 앞으로 가져오세요.</p>
+        </div>
+
+        <div class="tutorial-booth">
+          <div class="tutorial-face" aria-hidden="true">儒</div>
+          <div id="tutorial-dialogue" class="tutorial-dialogue">“학문과 명분을 중히 여기며 살아왔습니다.”</div>
+        </div>
+
+        <div class="tutorial-desk">
+          <div id="tutorial-doc-pile" class="tutorial-doc-pile"></div>
+        </div>
+
+        <div class="tutorial-stamp-dock">
+          <button class="tutorial-stamp" data-tutorial-faction="훈구">
+            <img src="assets/ui/stamp_hungu.webp" alt="훈구 도장" />
+            <span>훈구</span>
+          </button>
+          <div id="tutorial-status" class="tutorial-status">먼저 서류를 확인하세요.</div>
+          <button class="tutorial-stamp" data-tutorial-faction="사림">
+            <img src="assets/ui/stamp_sarim.webp" alt="사림 도장" />
+            <span>사림</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-loading" class="screen loading-screen">
+      <div class="loading-panel">
+        <div class="loading-seal">印</div>
+        <h2>심사소 준비 중</h2>
+        <p id="loading-text">지원자와 서류를 불러오고 있습니다.</p>
+        <div class="loading-track"><div id="loading-bar" class="loading-bar"></div></div>
+        <b id="loading-percent">0%</b>
+      </div>
+    </section>
+
+    <section id="screen-game" class="screen game-screen">
+      <div class="game-topbar">
+        <div class="hud-block"><span>점수</span><b id="hud-score">0</b></div>
+        <div class="hud-block timer"><span>남은 시간</span><b id="hud-time">05:00</b></div>
+        <div class="hud-block"><span>심사</span><b id="hud-count">1/20</b></div>
+        <div class="hud-block"><span>연속</span><b id="hud-combo">0</b></div>
+      </div>
+
+      <div id="time-warning" class="time-warning">서둘러 심사하시오!</div>
+      <div id="toast" class="toast"></div>
+      <div id="phase-overlay" class="phase-overlay" aria-hidden="true">
+        <div class="phase-card">
+          <img id="phase-overlay-art" class="phase-overlay-art" src="assets/banners/phase2.webp" alt="다음 심사 단계" />
+          <span id="phase-kicker">1차 심사 완료</span>
+          <h2 id="phase-title">다음 심사로</h2>
+          <p id="phase-summary"></p>
+        </div>
+      </div>
+      <div id="final-directive" class="final-directive" aria-hidden="true">
+        <div class="final-directive-card">
+          <img id="final-directive-banner" class="final-directive-banner" src="assets/banners/final_directive.webp" alt="성종의 특별 지시" />
+          <h2>마지막 인재입니다.</h2>
+          <p>가장 까다로운 심사입니다. 서류를 끝까지 확인하고 판정하십시오.</p>
+          <img id="final-review-banner" class="final-review-banner" src="assets/banners/final_review.webp" alt="마지막 중요 심사" />
+        </div>
+      </div>
+
+      <div id="sudden-event-overlay" class="sudden-event-overlay" aria-hidden="true">
+        <div class="sudden-event-card">
+          <div class="sudden-event-top">
+            <span class="sudden-event-kicker">돌발 이벤트</span>
+            <b id="sudden-event-sigil">!</b>
+          </div>
+          <h2 id="sudden-event-title">뜻밖의 사건</h2>
+          <p id="sudden-event-desc"></p>
+          <div id="sudden-event-extra" class="sudden-event-extra" hidden></div>
+          <div id="sudden-event-actions" class="sudden-event-actions"></div>
+        </div>
+      </div>
+
+      <div class="booth-zone">
+        <div id="applicant-window" class="applicant-window">
+          <img id="applicant-portrait" alt="지원자 초상" />
+          <div class="applicant-tag">
+            <b id="applicant-name">지원자</b>
+            <div class="applicant-meta"><em id="applicant-personality">차분형</em><span id="applicant-difficulty">초급</span></div>
+          </div>
+        </div>
+        <div id="applicant-dialogue" class="dialogue-bubble"></div>
+        <div id="special-event-panel" class="special-event-panel" hidden>
+          <div class="event-image-placeholder" aria-hidden="true"></div>
+          <div class="special-event-text">
+            <span>특수 심사</span>
+            <b id="special-event-title">특이사항</b>
+            <p id="special-event-desc"></p>
+            <small id="special-event-rule" class="special-event-rule"></small>
+            <strong id="special-event-timer" class="special-event-timer" hidden></strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="combo-strip">
+        <span>연속 정답 보너스</span>
+        <div class="combo-progress-wrap"><div class="combo-track"><i id="combo-fill"></i></div><div class="combo-marks"><span>3</span><span>5</span><span>8</span><span>10</span></div></div>
+        <div class="combo-next"><b id="combo-bonus-preview">다음 정답 +0</b><small id="combo-next-milestone">3콤보까지 3회</small></div>
+      </div>
+
+      <div class="desk-zone">
+        <div class="desk-header compact-desk-header">
+          <div id="today-brief" class="today-brief today-brief-compact">
+            <span class="today-text-label">오늘의 심사</span>
+            <div class="round-flavor-copy">
+              <strong id="round-flavor-text" class="round-flavor-text">기록을 꼼꼼히 살피십시오.</strong>
+              <small id="round-effect-text" class="round-effect-text">효과 · 오늘의 규칙이 심사에 적용됩니다.</small>
+            </div>
+            <em id="phase-chip" class="phase-chip phase-chip-visible">1차 심사</em>
+          </div>
+          <div class="desk-quick-rule" aria-hidden="true">심사 원칙 · <b>한 가지 단서만 보고 찍지 말 것</b></div>
+        </div>
+
+        <div class="desk-board">
+          <button id="btn-doc-prev" class="doc-side-btn left" type="button" aria-label="이전 서류">◀</button>
+          <div class="doc-center-zone">
+            <div id="doc-pile" class="doc-pile" aria-label="서류 더미"></div>
+            <div class="doc-nav-status-float"><span>서류</span><b id="doc-nav-status">1 / 3</b></div>
+          </div>
+          <button id="btn-doc-next" class="doc-side-btn right" type="button" aria-label="다음 서류">▶</button>
+        </div>
+      </div>
+
+      <div class="stamp-dock">
+        <button class="stamp-choice" data-faction="훈구">
+          <img src="assets/ui/stamp_hungu.webp" alt="훈구 도장" />
+          <span>훈구 도장</span>
+        </button>
+        <div id="selected-stamp-preview" class="selected-stamp-preview">선택된 도장 없음</div>
+        <button class="stamp-choice" data-faction="사림">
+          <img src="assets/ui/stamp_sarim.webp" alt="사림 도장" />
+          <span>사림 도장</span>
+        </button>
+      </div>
+
+      <div id="document-modal" class="document-modal" aria-hidden="true">
+        <div class="document-modal-backdrop" data-close-doc></div>
+        <div class="document-modal-sheet">
+          <button class="modal-close" data-close-doc aria-label="닫기">×</button>
+          <span class="modal-kicker">확대 열람</span>
+          <div id="modal-special-badge" class="modal-special-badge" hidden>⚠ 특이사항 포함</div>
+          <h3 id="modal-doc-title"></h3>
+          <div id="modal-doc-text" class="modal-doc-text"></div>
+          <div id="modal-scroll-hint" class="modal-scroll-hint" hidden>아래로 더 읽기 ↓</div>
+          <div class="modal-doc-nav">
+            <button id="btn-modal-prev" type="button">← 이전 서류</button>
+            <span id="modal-doc-counter">1 / 3</span>
+            <button id="btn-modal-next" type="button">다음 서류 →</button>
+          </div>
+          <p class="modal-help">좌우로 밀어서 다른 서류도 확인할 수 있습니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-result" class="screen result-screen">
+      <div class="result-scroll">
+        <div id="record-banner" class="record-banner"></div>
+        <div class="result-plaque">
+          <span class="eyebrow">심사 종료</span>
+          <h2 id="result-title">판결 완료</h2>
+          <p id="result-subtitle"></p>
+        </div>
+        <div class="result-rank-badge">
+          <img id="result-grade-art" class="result-grade-art" src="assets/results/grade_apprentice.webp" alt="견습 심사관 등급" />
+          <div class="result-grade-copy"><span>심사관 등급</span><b id="result-grade">견습 심사관</b></div>
+        </div>
+        <div class="result-grid result-primary-grid">
+          <div class="result-primary score"><span>최종 점수</span><b id="result-score">0</b></div>
+          <div class="result-primary accuracy"><span>정확도</span><b id="result-accuracy">0%</b></div>
+          <div class="result-primary combo"><span>최대 콤보</span><b id="result-combo">0</b></div>
+        </div>
+        <div id="result-performance-message" class="result-performance-message">
+          판정 기록을 정리하고 있습니다.
+        </div>
+        <div class="result-achievement-row" aria-label="이번 심사 성과">
+          <div id="achievement-accuracy" class="achievement-badge"><img src="assets/results/achievement_accuracy.webp" alt="높은 정확도 배지" /><span>정확</span><b>판정 기록</b></div>
+          <div id="achievement-combo" class="achievement-badge"><img src="assets/results/achievement_combo.webp" alt="높은 콤보 배지" /><span>연속</span><b>콤보 기록</b></div>
+          <div id="achievement-careful" class="achievement-badge"><img src="assets/results/achievement_careful.webp" alt="신중한 심사 배지" /><span>신중</span><b>심사 기록</b></div>
+        </div>
+        <div class="result-secondary-grid">
+          <div><span>남은 시간</span><b id="result-time">00:00</b></div>
+          <div><span>평균 심사</span><b id="result-average">0.0초</b></div>
+          <div><span>오답</span><b id="result-penalty">0회</b></div>
+        </div>
+        <div class="result-analytics wood-panel">
+          <div class="panel-title-row"><h3>심사 분석</h3><span id="result-collection" class="status-chip">0 / 70</span></div>
+          <div class="analytics-grid">
+            <div><span>훈구 정확도</span><b id="result-hungu-accuracy">0%</b></div>
+            <div><span>사림 정확도</span><b id="result-sarim-accuracy">0%</b></div>
+            <div><span>가장 빠른 판정</span><b id="result-fastest">-</b><small id="result-fastest-time">-</small></div>
+            <div><span>가장 오래 고민</span><b id="result-slowest">-</b><small id="result-slowest-time">-</small></div>
+            <div><span>성급한 판정</span><b id="result-rushed">0회</b></div>
+            <div><span>특수 심사</span><b id="result-events">0명</b><small id="result-special-success">성공 0명</small></div>
+            <div><span>돌발 이벤트</span><b id="result-sudden-events">0회</b><small>한 판 최대 3회</small></div>
+          </div>
+        </div>
+        <div id="replay-section" class="replay-section wood-panel">
+          <div class="panel-title-row"><h3>이번 심사의 하이라이트</h3><span class="status-chip">리플레이 카드</span></div>
+          <div id="replay-card-list" class="replay-card-list"></div>
+        </div>
+        <div id="wrong-review-section" class="wrong-review wood-panel">
+          <div class="panel-title-row">
+            <h3>오답 복기</h3>
+            <span id="wrong-review-count" class="status-chip">0명</span>
+          </div>
+          <p>틀린 지원자만 간단히 다시 확인할 수 있습니다.</p>
+          <div id="wrong-review-list" class="wrong-review-list"></div>
+        </div>
+        <div class="result-ranking wood-panel">
+          <div class="panel-title-row">
+            <h3>명예의 전당 TOP 20</h3>
+            <button id="btn-result-refresh-ranking" class="ranking-refresh-btn" type="button">↻ 새로고침</button>
+          </div>
+          <p id="result-rank-message"></p>
+          <ol id="result-ranking-list" class="ranking-list shared-ranking-list"></ol>
+        </div>
+        <div class="result-actions">
+          <button id="btn-retry" class="pixel-btn primary">다시 도전</button>
+          <button id="btn-home" class="pixel-btn">메인으로</button>
+        </div>
+      </div>
+    </section>
+
+
+    <div id="settings-modal" class="teacher-modal settings-modal" aria-hidden="true">
+      <div class="teacher-backdrop" data-close-settings></div>
+      <div class="teacher-panel settings-panel">
+        <button class="modal-close" data-close-settings aria-label="닫기">×</button>
+        <span class="eyebrow">게임 설정</span>
+        <h2>소리와 진동</h2>
+        <label class="toggle-label"><span>음악·효과음</span><input id="setting-sound" type="checkbox" checked /></label>
+        <label class="toggle-label"><span>진동</span><input id="setting-vibration" type="checkbox" checked /></label>
+        <p>이 설정은 현재 기기에 저장됩니다.</p>
+      </div>
+    </div>
+
+    <div id="teacher-modal" class="teacher-modal" aria-hidden="true">
+      <div class="teacher-backdrop" data-close-teacher></div>
+      <div class="teacher-panel">
+        <button class="modal-close" data-close-teacher aria-label="닫기">×</button>
+        <span class="eyebrow">교사용 테스트 메뉴</span>
+        <h2>심사 설정</h2>
+        <p>테스트 모드 기록은 명예의 전당에 저장되지 않습니다.</p>
+        <label>지원자 수
+          <select id="teacher-count">
+            <option value="5">5명</option>
+            <option value="10">10명</option>
+            <option value="15">15명</option>
+            <option value="20" selected>20명</option>
+          </select>
+        </label>
+        <label>제한 시간
+          <select id="teacher-time">
+            <option value="60">60초</option>
+            <option value="180">180초</option>
+            <option value="300" selected>300초</option>
+          </select>
+        </label>
+        <label>난이도
+          <select id="teacher-difficulty">
+            <option value="혼합" selected>혼합</option>
+            <option value="초급">초급만</option>
+            <option value="중급">중급만</option>
+            <option value="고급">고급만</option>
+          </select>
+        </label>
+        <label>고정 심사번호
+          <input id="teacher-seed" inputmode="numeric" maxlength="9" placeholder="예: 314159" />
+        </label>
+        <div class="teacher-actions">
+          <button id="btn-teacher-apply" class="pixel-btn primary">테스트 설정 적용</button>
+          <button id="btn-teacher-disable" class="pixel-btn">일반 모드 복귀</button>
+          <button id="btn-balance-check" class="pixel-btn teacher-wide">프로필 밸런스 검사</button>
+          <div id="balance-report" class="balance-report teacher-wide">아직 검사하지 않았습니다.</div>
+          <button id="btn-clear-ranking" class="pixel-btn teacher-wide">순위 초기화</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="config.js?v=10.6.1-rankfix"></script>
+  <script src="data/profiles.js?v=10.6.1-rankfix"></script>
+  <script src="app.js?v=10.6.1-rankfix"></script>
+</body>
+</html>
